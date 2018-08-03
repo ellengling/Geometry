@@ -1,0 +1,87 @@
+Name My_ComPair
+Verision 0.0
+
+Include ../materials/Materials.geo
+DefaultRangeCut 0.000002
+
+SurroundingSphere 150.0  0.0  0.0  0.0  150.0
+
+Volume World
+World.Material Vacuum
+World.Visibility 0
+World.Color 0
+World.Shape BRIK 500. 500. 500.
+World.Mother 0
+
+# This is our Tracker
+Include SiStripDetector_50Layer.geo
+Include SiStripProperties.det
+
+# This is our new fancy CZT calorimeter
+Include CalorimeterCZTLogDetector.geo
+Include CalorimeterCZTLogProperties.det
+
+# This is our CsI calorimeter
+Include CalorimeterCSIDetector.geo
+Include CalorimeterCSIProperties.det
+
+# No ACD
+
+# Builds the detector volumes
+
+Volume Tracker
+Tracker.Material Vacuum
+Tracker.Visibility 1
+Tracker.Shape BRIK 7.2 7.2 60.3225
+Tracker.Position 0.0 0.0 60.3225
+Tracker.Mother World
+Tracker.Color 6
+
+Volume CalCZT
+CalCZT.Material Vacuum
+CalCZT.Visibility 0
+CalCZT.Shape BRIK 5.0 5.0 2.1
+CalCZT.Position 0.0 0.0 -2.1
+CalCZT.Mother World
+
+# No Side CZT
+
+Volume CalCSI
+CalCSI.Material Vacuum
+CalCSI.Visibility 0
+CalCSI.Shape BRIK 5.5 5.5 4.0
+CalCSI.Position 0.0 0.0 -8.2
+CalCSI.Mother World
+
+# Place SiStripDetector in Tracker
+
+SiStripDetector.Mother Tracker
+SiStipDetector.Position 0.0 0.0 0.0
+
+# Adds CZT and CsI Detectors
+
+CZTLogDetector.Mother CalCZT
+CZTLogDetector.Position 0.0 0.0 0.0
+
+CSIDetector.Mother CalCSI
+CSIDetector.Position 0.0 0.0 0.0
+
+# Base Triggers, require 2 hits in Si Detector and one hit in the CsI calorimeter
+Trigger MainTriggerCsI
+MainTriggerCsI.Veto false
+MainTriggerCsI.TriggerByDetector true
+MainTriggerCsI.Detector SStrip 2
+MainTriggerCsI.Detector DCalCSI 1
+
+# Base Triggers, require 2 hits in Si Detector and one hit in the CZT calorimeter
+Trigger MainTriggerCZT
+MainTriggerCZT.Veto false
+MainTriggerCZT.TriggerByDetector true
+MainTriggerCZT.Detector SStrip 2
+MainTriggerCZT.Detector DCalCZT 1
+
+# Base Triggers, require only 2 hits in Si Detector
+Trigger MainTriggerSi
+MainTriggerSi.Veto false
+MainTriggerSi.TriggerByDetector true
+MainTriggerSi.Detector SStrip 2
